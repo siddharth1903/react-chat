@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Avatar } from 'primereact/avatar';
 import { Button } from "primereact/button";
+import Users from "../users";
 
 
 
@@ -18,7 +19,9 @@ const Home = () => {
                     <div><Button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</Button></div>
                 </div>
             </div>
-            <div className="col"></div>
+            <div className="col">
+                <Users />
+            </div>
             <div className="col"></div>
         </div>
     )

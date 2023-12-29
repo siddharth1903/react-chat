@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       domain="gchat.au.auth0.com"
       clientId="1itSl1H2QlFiWHdWOaEzHLUiCzVlySRq"
       authorizationParams={{
-        redirect_uri: window.location.origin,
+        redirect_uri: window.location.href,
         audience: "https://set-gorilla-83.hasura.app/v1/graphql"
       }}
     >

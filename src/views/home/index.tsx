@@ -16,7 +16,7 @@ const Home = () => {
                     <Avatar icon="pi pi-user" image={user?.picture} size="xlarge" shape="circle" />
                     <div>{user?.name}</div>
                     <div>{user?.email}</div>
-                    <div><Button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</Button></div>
+                    <div><Button onClick={() => logout({ logoutParams: { returnTo: window.location.href } })}>Logout</Button></div>
                 </div>
             </div>
             <div className="col">

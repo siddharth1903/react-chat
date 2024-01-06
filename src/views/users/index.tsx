@@ -1,20 +1,19 @@
-import { DataView } from 'primereact/dataview';
-import { GET_USER_LIST } from '../../queries/getUserList';
 import { useQuery } from '@apollo/client';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Avatar } from 'primereact/avatar';
-import moment from 'moment';
+import { ListBox } from 'primereact/listbox';
+import { Dispatch, SetStateAction } from 'react';
+
+import { GET_USER_LIST } from '../../graphql/queries/getUserList';
+import { User } from '../../models/user';
+import userTemplate from '../../templates/user-template';
 
 
-interface User {
-    userId: string;
-    userName: string;
-    lastSeen: Date;
-    email: string;
-    picture: string;
+interface ComponentProps {
+    selectedUser: User | undefined;
+    onUserSelect: Dispatch<SetStateAction<User | undefined>>;
 }
 
-const Users = () => {
+const Users: React.FC<ComponentProps> = ({ onUserSelect }) => {
 
     const { user } = useAuth0();
 
@@ -24,31 +23,17 @@ const Users = () => {
         }
     });
 
-    const userTemplate = (user: User) => {
-        return (
-            <div className='grid'>
-                <div className='col-12 md:col-2 flex flex-column align-items-center'>
-                    <Avatar icon="pi pi-user" image={user?.picture} shape="circle" />
-                </div>
-                <div className='col'>
-                    <div>
-                        {user.userName || user.email}
-                    </div>
-                    <div>
-                        <small>last seen on {moment(user.lastSeen).format('MMMM Do YYYY, h:mm:ss a')}</small>
-                    </div>
-                </div>
-
-            </div>
-        )
-
-
-    }
-
     if (loading) return <p>Loading...</p>;
+
     if (error) return <p>Error : {error.message}</p>;
 
-    return <DataView value={data.chat_app_users} itemTemplate={userTemplate}></DataView>
+    return (
+        <>
+            <h3 className="text-center">List of users </h3>
+            <ListBox value="" onChange={(e) => onUserSelect(e.value)} dataKey='userId' options={data.chat_app_users} itemTemplate={userTemplate} filter filterBy='userName,email'></ListBox>
+        </>
+
+    )
 };
 
 export default Users;

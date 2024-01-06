@@ -1,10 +1,12 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import './App.css'
-import Login from './views/login'
-import Home from './views/home';
+
+import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useReducer } from 'react';
-import tokenReducer from './reducers/token-reducer';
+
 import { ApolloContext } from './apollo-client';
+import tokenReducer from './reducers/token-reducer';
+import Home from './views/home';
+import Login from './views/login'
 
 function App() {
 

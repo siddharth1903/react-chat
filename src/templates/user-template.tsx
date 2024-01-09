@@ -7,7 +7,7 @@ const userTemplate = (user: User) => {
     return (
         <div className='flex gap-2'>
             <div className='flex flex-column align-items-center'>
-                <Avatar icon="pi pi-user" image={user?.picture} shape="circle" />
+                <Avatar icon="pi pi-user" image={user?.picture} shape="circle" size='large' />
             </div>
             <div className='flex-column'>
                 <div>

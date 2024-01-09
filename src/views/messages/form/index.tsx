@@ -19,7 +19,21 @@ const SendMessageForm: React.FC<ComponentProps> = ({ targetUser }) => {
 
     const { register, handleSubmit, reset, formState: { isSubmitSuccessful }, formState } = useForm<ChatFormInput>();
 
-    const [sendMessage] = useMutation(SEND_MESSAGE);
+    const [sendMessage] = useMutation(SEND_MESSAGE, {
+        update: (cache, { data }) => {
+            cache.modify({
+                fields: {
+                    chat_app_messages: (existing = [], { toReference }) => {
+
+                        const cacheRef = toReference(data.insert_chat_app_messages.returning[0]);
+
+                        return [cacheRef, ...existing]
+                    }
+                }
+            })
+
+        }
+    });
 
     const onSubmit: SubmitHandler<ChatFormInput> = (data: ChatFormInput) => {
 
@@ -45,7 +59,7 @@ const SendMessageForm: React.FC<ComponentProps> = ({ targetUser }) => {
     return (
 
         <form className="flex gap-2 flex-none" onSubmit={handleSubmit(onSubmit)}>
-            <InputText {...register('messageText')} className="flex-1" placeholder="Type your message here..." />
+            <InputText {...register('messageText')} autoComplete='off' className="flex-1" placeholder="Type your message here..." />
             <Button type="submit" disabled={!formState.isDirty || !formState.isValid} icon="pi pi-check" aria-label="Send Message" title="Send Message"></Button>
         </form>
 

@@ -18,7 +18,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       clientId="1itSl1H2QlFiWHdWOaEzHLUiCzVlySRq"
       authorizationParams={{
         redirect_uri: window.location.href,
-        audience: 'https://set-gorilla-83.hasura.app/v1/graphql'
+        audience: 'https://set-gorilla-83.hasura.app/v1/graphql',
+        scope: 'openid profile email'
       }}
     >
       <App />

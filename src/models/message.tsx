@@ -5,8 +5,11 @@ export interface Message {
     time: Date;
     text: string;
     is_read: boolean;
+    user_context: 'SENDER' | 'RECEIVER';
 }
 
-export interface MessageContext extends Message {
-    senderOrReceiver: 'SENDER' | 'RECEIVER';
+
+export interface MessageTemplate extends Message {
+    picture?: string;
+    userName?: string;
 }

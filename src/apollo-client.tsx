@@ -4,7 +4,6 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition, offsetLimitPagination } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 
-import { FIELD_CHAT_APP_MESSAGES } from './apollo/fieldPolicy/chatAppMessages';
 
 interface Props {
     children: React.ReactNode;
@@ -51,23 +50,46 @@ export const ApolloContext: React.FC<Props> = ({ token, children }) => {
 
     const apolloClient = new ApolloClient({
         link: splitLink,
+        connectToDevTools: !import.meta.env.PROD,
         cache: new InMemoryCache({
             typePolicies: {
-                ...FIELD_CHAT_APP_MESSAGES,
                 Query: {
                     fields: {
                         chat_app_messages: {
 
                             ...offsetLimitPagination(['$targetUser']),
 
-                            read: (existing, { args }) => {
+                            read: (existing: object[], { args }) => {
 
                                 let returnList;
 
-                                if (existing && existing.slice(args?.offset, args?.offset + args?.limit).length > 0) {
+                                if (existing) {
 
-                                    returnList = existing.slice(args?.offset, args?.offset + args?.limit)
+                                    const slicedList = existing.slice(args?.offset, args?.offset + args?.limit);
+
+                                    //first time chat message
+                                    const totalItemsInCache = slicedList.length === existing.length ? 'FULL' : 'NONE'
+
+                                    if (totalItemsInCache === 'FULL') {
+
+                                        returnList = slicedList;
+
+                                    } else {
+
+                                        const pageItemsInCache = slicedList.length > 0 && slicedList.length < args?.limit ? 'PARTIAL' :
+                                            slicedList.length > 0 && slicedList.length === args?.limit ? 'FULL' : 'NONE';
+
+                                        const emptyIndex = slicedList.findIndex((message) => !message);
+
+                                        if ((emptyIndex === -1 && pageItemsInCache === 'FULL')) {
+
+                                            returnList = slicedList;
+                                        }
+                                    }
+
+
                                 }
+
                                 return returnList;
                             }
 
